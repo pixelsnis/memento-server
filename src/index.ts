@@ -1,3 +1,4 @@
+import { Router } from "itty-router";
 import { validateAuth } from "./utils/auth";
 
 type Env = {
@@ -5,13 +6,15 @@ type Env = {
   NEO4J_PASSWORD: string;
 };
 
-export default {
-  async fetch(request: Request, env: Env, _: any): Promise<Response> {
-    const auth = await validateAuth(request);
-    if (!auth) {
-      return new Response("Unauthorized", { status: 401 });
-    }
+const router = Router();
 
-    return new Response("Hello World!");
-  },
+router.all("*", async (request: Request) => {
+  const auth = await validateAuth(request);
+  if (!auth) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+});
+
+export default {
+  fetch: router.handle,
 };

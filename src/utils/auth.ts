@@ -1,34 +1,20 @@
-import { createRemoteJWKSet, jwtVerify } from "jose";
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 
-const APPLE_JWKS_URL = "https://appleid.apple.com/auth/keys";
+const SUPABASE_URL = 'https://xpjuesvglvuiszokgpsl.supabase.co';
+const SUPABASE_JWKS_URL = `${SUPABASE_URL}/auth/v1/.well-known/jwks.json`;
 
-interface AppleTokenPayload {
-  iss: string;
-  sub: string;
-  aud: string;
-  iat: number;
-  exp: number;
-  nonce: string;
-  c_hash: string;
-  email: string;
-  email_verified: string;
-  auth_time: number;
-  is_private_email: string;
-}
-
-export async function verifyAppleToken(token: string) {
-  const JWKS = createRemoteJWKSet(new URL(APPLE_JWKS_URL));
+async function verifySupabaseToken(token: string) {
+  const JWKS = createRemoteJWKSet(new URL(SUPABASE_JWKS_URL));
 
   try {
     const { payload } = await jwtVerify(token, JWKS, {
-      issuer: "https://appleid.apple.com",
-      audience: "com.pixelsnis.Memento",
+      issuer: `${SUPABASE_URL}/auth/v1`,
+      audience: 'authenticated',
     });
-
-    return payload as unknown as AppleTokenPayload;
+    return payload;
   } catch (error) {
-    console.error("Apple token verification failed:", error);
-    throw new Error("Invalid Apple ID token");
+    console.error('Supabase token verification failed:', error);
+    throw new Error('Invalid Supabase token');
   }
 }
 
@@ -40,7 +26,7 @@ export async function validateAuth(request: Request) {
 
   const token = authHeader.substring(7);
   try {
-    const payload = await verifyAppleToken(token);
+    const payload = await verifySupabaseToken(token);
     return payload;
   } catch (error) {
     console.error("Auth validation failed", error);

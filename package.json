@@ -1,6 +1,7 @@
 {
   "name": "memento-server",
   "module": "index.ts",
+  "types": "types.d.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest",
@@ -11,6 +12,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "ai": "^5.0.9",
+    "itty-router": "^5.0.21",
     "jose": "^6.0.12",
     "zod": "^4.0.17"
   },

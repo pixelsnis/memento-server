@@ -1,0 +1,13 @@
+{
+  "name": "memento-server",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "miniflare": "^4.20250803.0",
+    "wrangler": "^4.28.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
